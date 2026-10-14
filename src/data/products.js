@@ -4,10 +4,11 @@ export const BUSINESS_CONFIG = {
   owner: 'CCARITA HILAHUANCCO JOSE',
   address: 'A.H. PROMUVI IV NUEVO ILO, MZ. 35 LOTE 20, ILO, MOQUEGUA',
   city: 'Ilo, Moquegua',
-  adminWhatsApp: '51953953533', // Número real del local
-  adminDisplayPhone: '953 953 533',
-  secondaryPhone: '959 578 182 / 495844',
-  yapeNumber: '953 953 533',
+  adminWhatsApp: '51960447032', // Número para recibir los pedidos por WhatsApp
+  adminDisplayPhone: '960 447 032',
+  secondaryPhone: '953 953 533 / 959 578 182',
+  yapeNumber: '960 447 032',
+
   yapeOwner: 'José Ccarita (Don José)',
   packaging: {
     taperPrice: 1.00, // S/ 1.00 por plato servido para llevar
