@@ -124,6 +124,26 @@ export default function OrderSuccessTracker({ initialOrder, onNewOrder, minutesL
           </p>
         </div>
 
+        {/* Botón Destacado para Enviar Comanda a WhatsApp */}
+        <div className="p-4 bg-emerald-50 rounded-2xl border-2 border-emerald-300 space-y-2.5 text-center">
+          <div className="flex items-center justify-center gap-2 text-emerald-950 font-black text-sm">
+            <MessageCircle className="w-5 h-5 text-emerald-600" />
+            <span>Notificar a Don José por WhatsApp</span>
+          </div>
+          <p className="text-xs text-emerald-800 font-medium max-w-sm mx-auto">
+            Haz clic en el botón verde para abrir WhatsApp y enviar la comanda completa a Don José (<strong>+51 960 447 032</strong>):
+          </p>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2.5 py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md transition active:scale-95 cursor-pointer"
+          >
+            <MessageCircle className="w-5 h-5 fill-white" />
+            <span>Enviar Detalle a WhatsApp (+51 960 447 032)</span>
+          </a>
+        </div>
+
         {/* TARJETA DE ESTADO EN VIVO DESTACADA */}
         <div className="p-5 bg-gradient-to-b from-slate-50 to-slate-100 rounded-3xl border-2 border-slate-200 space-y-4">
           <div className="flex items-center justify-between">
@@ -205,19 +225,6 @@ export default function OrderSuccessTracker({ initialOrder, onNewOrder, minutesL
             <span className="text-slate-700">Total a Pagar:</span>
             <span className="text-amber-800 text-base">S/ {order.total.toFixed(2)}</span>
           </div>
-        </div>
-
-        {/* Botón Opcional de WhatsApp */}
-        <div className="pt-1">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs rounded-xl border border-emerald-200 transition"
-          >
-            <MessageCircle className="w-4 h-4 text-emerald-600" />
-            <span>¿Deseas enviar o consultar por WhatsApp a Don José? (Opcional)</span>
-          </a>
         </div>
 
         {/* Ver Recibo Digital (Si lo solicitó) */}

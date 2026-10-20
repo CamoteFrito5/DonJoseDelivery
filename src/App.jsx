@@ -18,6 +18,7 @@ import {
   clearActiveOrderSession
 } from './services/orderStorage';
 import { sendOrderToGoogleSheets } from './services/googleSheetsWebhook';
+import { generateWhatsAppLink } from './services/whatsappService';
 
 export default function App() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -197,6 +198,14 @@ export default function App() {
     // Guardar en almacenamiento y registrar sesión de 4 horas
     saveOrderLocally(newOrder);
     sendOrderToGoogleSheets(newOrder);
+
+    // Abrir automáticamente WhatsApp con la comanda para el administrador
+    try {
+      const whatsappUrl = generateWhatsAppLink(newOrder, BUSINESS_CONFIG);
+      window.open(whatsappUrl, '_blank');
+    } catch (e) {
+      console.warn('No se pudo abrir WhatsApp automáticamente:', e);
+    }
 
     setConfirmedOrder(newOrder);
     setActiveSessionInfo({ order: newOrder, minutesLeft: 240 });
