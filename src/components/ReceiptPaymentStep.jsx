@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { FileText, QrCode, Banknote, Copy, Check, ArrowLeft, ArrowRight, ShieldCheck, CheckSquare, Square } from 'lucide-react';
+import { FileText, Banknote, Copy, Check, ArrowLeft, ArrowRight, ShieldCheck, CheckSquare, Square, Store, QrCode } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../data/products';
 
 export default function ReceiptPaymentStep({
+  customerData,
   orderCalculation,
   paymentData,
   onUpdatePaymentData,
@@ -12,8 +13,10 @@ export default function ReceiptPaymentStep({
   const [copied, setCopied] = useState(false);
   const [wantsReceipt, setWantsReceipt] = useState(!!paymentData.wantsReceipt);
 
+  const isPickup = customerData?.deliveryType === 'tienda';
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(BUSINESS_CONFIG.yapeNumber);
+    navigator.clipboard.writeText(BUSINESS_CONFIG.yapeNumber || '960447032');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -34,103 +37,116 @@ export default function ReceiptPaymentStep({
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         <div className="border-b border-slate-100 pb-4">
           <span className="text-xs font-black text-amber-600 uppercase tracking-widest block mb-1">
-            Paso 4 de 4 • Forma de Pago y Comprobante
+            Paso 4 de 4 • {isPickup ? 'Comprobante y Confirmación' : 'Forma de Pago y Comprobante'}
           </span>
           <h2 className="text-2xl font-black text-slate-900">
-            ¿Cómo deseas pagar?
+            {isPickup ? 'Confirmación de Pedido para Llevar' : '¿Cómo deseas pagar?'}
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Elige tu método de pago. El recibo y DNI son totalmente opcionales.
+            {isPickup
+              ? 'Como recogerás en persona en el local, pagarás directamente en caja al recibir tu pedido.'
+              : 'Elige tu método de pago para el delivery. El recibo y DNI son totalmente opcionales.'}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Selector de Método de Pago */}
-          <div>
-            <label className="block text-sm font-black text-slate-900 mb-2">
-              Forma de Pago:
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Opción YAPE */}
-              <button
-                type="button"
-                onClick={() => onUpdatePaymentData({ paymentMethod: 'YAPE' })}
-                className={`p-4 rounded-2xl border-2 text-left transition flex items-center gap-3 cursor-pointer ${
-                  paymentData.paymentMethod === 'YAPE'
-                    ? 'border-purple-600 bg-purple-50/70 shadow-xs'
-                    : 'border-slate-200 hover:border-slate-300 bg-slate-50'
-                }`}
-              >
-                <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-lg">
-                  Y
-                </div>
-                <div>
-                  <h5 className="font-black text-slate-900 text-sm">Yape a Don José</h5>
-                  <p className="text-[11px] text-slate-500">Pagas antes de enviar</p>
-                </div>
-              </button>
-
-              {/* Opción EFECTIVO */}
-              <button
-                type="button"
-                onClick={() => onUpdatePaymentData({ paymentMethod: 'EFECTIVO' })}
-                className={`p-4 rounded-2xl border-2 text-left transition flex items-center gap-3 cursor-pointer ${
-                  paymentData.paymentMethod === 'EFECTIVO'
-                    ? 'border-emerald-600 bg-emerald-50/70 shadow-xs'
-                    : 'border-slate-200 hover:border-slate-300 bg-slate-50'
-                }`}
-              >
-                <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-lg">
-                  <Banknote className="w-5 h-5" />
-                </div>
-                <div>
-                  <h5 className="font-black text-slate-900 text-sm">Efectivo al recibir</h5>
-                  <p className="text-[11px] text-slate-500">Pagas contra entrega</p>
-                </div>
-              </button>
+          {/* Si es RECOJO EN LOCAL: No mostrar selector de formas de pago */}
+          {isPickup ? (
+            <div className="p-4 bg-amber-50/70 rounded-2xl border border-amber-200 flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 font-bold">
+                <Store className="w-5 h-5" />
+              </div>
+              <div className="text-xs space-y-1">
+                <h4 className="font-black text-slate-900 text-sm">
+                  Pago presencial en caja al recoger
+                </h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Pagarás al momento de recoger tus platos en el local. Aceptamos <strong>Efectivo, Yape o Tarjeta</strong> directamente en caja.
+                </p>
+                <p className="text-[11px] text-amber-800 font-bold">
+                  📍 A.H. PROMUVI IV Mz. 35 Lte. 20 • Hora aprox: {customerData?.pickupTime || 'En 30 minutos'}
+                </p>
+              </div>
             </div>
-          </div>
-
-          {/* Detalle si elige YAPE */}
-          {paymentData.paymentMethod === 'YAPE' && (
-            <div className="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-3 animate-in fade-in">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-[11px] font-bold text-purple-700 block">Número de Yape de Don José:</span>
-                  <span className="text-xl font-black text-purple-950 font-mono tracking-wider">
-                    {BUSINESS_CONFIG.yapeNumber}
-                  </span>
-                  <p className="text-xs text-purple-800 font-semibold">{BUSINESS_CONFIG.yapeOwner}</p>
-                </div>
+          ) : (
+            /* Si es DELIVERY: Mostrar selector de formas de pago (SIN selector de denominación de billetes) */
+            <div className="space-y-3">
+              <label className="block text-sm font-black text-slate-900 mb-2">
+                Forma de Pago para el Delivery:
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Opción YAPE */}
                 <button
                   type="button"
-                  onClick={handleCopy}
-                  className="px-3 py-2 bg-white hover:bg-purple-100 text-purple-700 font-bold border border-purple-200 rounded-xl text-xs transition active:scale-95 flex items-center gap-1 shadow-2xs cursor-pointer"
+                  onClick={() => onUpdatePaymentData({ paymentMethod: 'YAPE' })}
+                  className={`p-4 rounded-2xl border-2 text-left transition flex items-center gap-3 cursor-pointer ${
+                    paymentData.paymentMethod === 'YAPE'
+                      ? 'border-purple-600 bg-purple-50/70 shadow-xs'
+                      : 'border-slate-200 hover:border-slate-300 bg-slate-50'
+                  }`}
                 >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? '¡Copiado!' : 'Copiar'}</span>
+                  <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-lg">
+                    Y
+                  </div>
+                  <div>
+                    <h5 className="font-black text-slate-900 text-sm">Yape a Don José</h5>
+                    <p className="text-[11px] text-slate-500">Pagas por anticipado</p>
+                  </div>
+                </button>
+
+                {/* Opción EFECTIVO CONTRA ENTREGA (Sin preguntar billetes) */}
+                <button
+                  type="button"
+                  onClick={() => onUpdatePaymentData({ paymentMethod: 'EFECTIVO' })}
+                  className={`p-4 rounded-2xl border-2 text-left transition flex items-center gap-3 cursor-pointer ${
+                    paymentData.paymentMethod === 'EFECTIVO'
+                      ? 'border-emerald-600 bg-emerald-50/70 shadow-xs'
+                      : 'border-slate-200 hover:border-slate-300 bg-slate-50'
+                  }`}
+                >
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-lg">
+                    <Banknote className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h5 className="font-black text-slate-900 text-sm">Efectivo al recibir</h5>
+                    <p className="text-[11px] text-slate-500">Pagas al motorizado</p>
+                  </div>
                 </button>
               </div>
-            </div>
-          )}
 
-          {/* Detalle si elige EFECTIVO */}
-          {paymentData.paymentMethod === 'EFECTIVO' && (
-            <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 space-y-2 animate-in fade-in">
-              <label className="block text-xs font-black text-emerald-900">
-                ¿Con cuánto billete pagarás? (Para llevarte vuelto exacto):
-              </label>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-emerald-900">S/</span>
-                <input
-                  type="number"
-                  step="5"
-                  value={paymentData.cashWith || ''}
-                  onChange={(e) => onUpdatePaymentData({ cashWith: e.target.value })}
-                  placeholder={`Ejemplo: ${Math.ceil(orderCalculation.total / 10) * 10 || 50}`}
-                  className="w-full text-sm px-3 py-2.5 rounded-xl border border-emerald-300 bg-white font-bold"
-                />
-              </div>
+              {/* Detalle si elige YAPE */}
+              {paymentData.paymentMethod === 'YAPE' && (
+                <div className="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-2 animate-in fade-in">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] font-bold text-purple-700 block">Número Yape de Don José:</span>
+                      <span className="text-xl font-black text-purple-950 font-mono tracking-wider">
+                        {BUSINESS_CONFIG.yapeNumber}
+                      </span>
+                      <p className="text-xs text-purple-800 font-semibold">{BUSINESS_CONFIG.yapeOwner}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleCopy}
+                      className="px-3 py-2 bg-white hover:bg-purple-100 text-purple-700 font-bold border border-purple-200 rounded-xl text-xs transition active:scale-95 flex items-center gap-1 shadow-2xs cursor-pointer"
+                    >
+                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copied ? '¡Copiado!' : 'Copiar'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-purple-700">
+                    Al terminar, podrás adjuntar la captura del pago directamente en el chat de WhatsApp.
+                  </p>
+                </div>
+              )}
+
+              {/* Detalle si elige EFECTIVO */}
+              {paymentData.paymentMethod === 'EFECTIVO' && (
+                <div className="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-emerald-900 animate-in fade-in flex items-center gap-2">
+                  <Banknote className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <span>Pagarás en efectivo al momento de recibir tu pedido del repartidor.</span>
+                </div>
+              )}
             </div>
           )}
 
@@ -175,7 +191,7 @@ export default function ReceiptPaymentStep({
             )}
           </div>
 
-          {/* Desglose de Pago Completo */}
+          {/* Desglose de Totales */}
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1.5 text-xs text-slate-700">
             <div className="flex justify-between">
               <span>Subtotal Platos:</span>
@@ -194,9 +210,9 @@ export default function ReceiptPaymentStep({
               </div>
             )}
             <div className="flex justify-between">
-              <span>Envío / Delivery:</span>
+              <span>Envío / Modalidad:</span>
               <span className="font-bold">
-                {orderCalculation.deliveryCost === 0 ? 'Gratis (Recojo)' : `S/ ${orderCalculation.deliveryCost.toFixed(2)}`}
+                {isPickup ? 'Gratis (Separar para llevar)' : (orderCalculation.deliveryCost === 0 ? 'Por coordinar' : `S/ ${orderCalculation.deliveryCost.toFixed(2)}`)}
               </span>
             </div>
             <div className="flex justify-between text-base font-black text-slate-900 pt-2 border-t border-slate-200">
@@ -205,14 +221,6 @@ export default function ReceiptPaymentStep({
                 S/ {orderCalculation.total.toFixed(2)}
               </span>
             </div>
-          </div>
-
-          {/* Información clara sobre el seguimiento */}
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-[11px] text-blue-800 flex items-start gap-2">
-            <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <p>
-              Al confirmar, <strong>permanecerás en esta página</strong> y podrás seguir el estado de tu pedido en vivo (en cocina, en camino, etc.) durante las próximas 4 horas sin perder tu información.
-            </p>
           </div>
 
           {/* Botones */}

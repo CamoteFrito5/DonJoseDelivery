@@ -1,9 +1,9 @@
 /**
  * Formatea y genera el enlace oficial de WhatsApp con el mensaje estructurado
- * para el administrador de Restaurant Parrilladas y Pollería DON JOSÉ.
+ * para el administrador de Restaurant Parrilladas y Pollería DON JOSÉ (+51 960 447 032).
  */
 export function generateWhatsAppLink(order, businessConfig) {
-  const phone = businessConfig.adminWhatsApp.replace(/\D/g, '');
+  const phone = (businessConfig.adminWhatsApp || '51960447032').replace(/\D/g, '');
 
   const itemsList = order.items
     .map(
@@ -22,47 +22,64 @@ export function generateWhatsAppLink(order, businessConfig) {
       ? `• 1x Bolsa de despacho — S/ ${(order.bagCost).toFixed(2)}\n`
       : '';
 
-  // Modalidad de entrega
-  let deliverySection = '';
+  let message = '';
+
   if (order.deliveryType === 'tienda') {
-    deliverySection = `🏪 *Modalidad:* RECOJO EN LOCAL DE DON JOSÉ\n📍 Local: A.H. PROMUVI IV Mz 35 Lte 20`;
-  } else if (order.deliveryZoneId === 'externo') {
-    deliverySection = `🛵 *Modalidad:* DELIVERY EXTERNO (Carrera pagada al motorizado)\n📍 Dirección: ${order.address}\n🧭 Referencia: ${order.reference || 'Ninguna'}`;
-  } else {
-    deliverySection = `🛵 *Modalidad:* DELIVERY (Moto Don José - ${order.deliveryZoneName})\n📍 Dirección: ${order.address}\n🧭 Referencia: ${order.reference || 'Ninguna'}`;
-  }
-
-  // Método de Pago
-  let paymentText = '';
-  if (order.paymentMethod === 'YAPE') {
-    paymentText = `💳 *MÉTODO DE PAGO:* YAPE A DON JOSÉ (953 953 533)\n📎 *(Adjunto captura de pantalla a continuación)*`;
-  } else if (order.paymentMethod === 'EFECTIVO') {
-    paymentText = `💵 *MÉTODO DE PAGO:* EFECTIVO CONTRA ENTREGA\n💵 *Paga con billete de:* S/ ${order.cashWith || order.total.toFixed(2)}\n🪙 *Vuelto a enviar:* S/ ${(order.cashWith ? Math.max(0, parseFloat(order.cashWith) - order.total) : 0).toFixed(2)}`;
-  } else {
-    paymentText = `📱 *MÉTODO DE PAGO:* YAPE AL REPARTIDOR AL ENTREGAR`;
-  }
-
-  // Mensaje final
-  const message = `🍗 *NUEVO PEDIDO #${order.id} — DON JOSÉ*
+    // ----------------------------------------------------
+    // FORMATO: SEPARAR PEDIDO PARA LLEVAR (RECOJO EN TIENDA)
+    // ----------------------------------------------------
+    message = `🍗 *NUEVO PEDIDO #${order.id} — DON JOSÉ*
+━━━━━━━━━━━━━━━━━━━━
+🛍️ *MODALIDAD: SEPARAR PARA LLEVAR*
+⏰ *Hora estimada de recojo:* ${order.pickupTime || 'En 30 minutos'}
+📍 *Local de recojo:* A.H. PROMUVI IV Mz 35 Lte 20 (Ilo)
 ━━━━━━━━━━━━━━━━━━━━
 👤 *Cliente:* ${order.fullName}
 📞 *Teléfono:* ${order.phone}
-${deliverySection}
 
-📦 *DETALLE DEL PEDIDO:*
+📦 *DETALLE DE PLATOS:*
 ${itemsList}
 ${taperText}${bagText}
 💵 *Subtotal Comida:* S/ ${order.subtotal.toFixed(2)}
-🥡 *Empaques (Táper/Bolsa):* S/ ${(order.taperCost + order.bagCost).toFixed(2)}
-🛵 *Envío:* ${order.deliveryCost === 0 ? (order.deliveryZoneId === 'externo' ? 'Se paga al motorizado' : 'Gratis (Recojo)') : `S/ ${order.deliveryCost.toFixed(2)}`}
-💰 *TOTAL GENERAL:* S/ ${order.total.toFixed(2)}
+🥡 *Empaques:* S/ ${(order.taperCost + order.bagCost).toFixed(2)}
+💰 *TOTAL A PAGAR EN CAJA:* S/ ${order.total.toFixed(2)}
 
-${paymentText}
-
-🧾 *COMPROBANTE:* NOTA DE PEDIDO (RECIBO)
-🪪 *DNI:* ${order.dni || '11111111 (VARIOS)'}
+💳 *PAGO:* Se cancela en caja al recoger (Efectivo / Yape / Tarjeta)
+${order.wantsReceipt ? `🧾 *Comprobante Solicitado:* Nota de Pedido (DNI: ${order.dni || 'VARIOS'})` : '🧾 *Comprobante:* No solicitado'}
 ━━━━━━━━━━━━━━━━━━━━
-ℹ️ *Estado:* PENDIENTE DE PREPARACIÓN`;
+✅ *Pedido registrado desde la página web*`;
+  } else {
+    // ----------------------------------------------------
+    // FORMATO: DELIVERY A DOMICILIO
+    // ----------------------------------------------------
+    const paymentMethodText =
+      order.paymentMethod === 'YAPE'
+        ? `💳 *FORMA DE PAGO:* YAPE A DON JOSÉ (+51 960 447 032)\n📎 *(Adjunto captura de pago por aquí)*`
+        : `💵 *FORMA DE PAGO:* EFECTIVO CONTRA ENTREGA`;
+
+    message = `🍗 *NUEVO PEDIDO #${order.id} — DON JOSÉ*
+━━━━━━━━━━━━━━━━━━━━
+🛵 *MODALIDAD: DELIVERY A DOMICILIO*
+📍 *Dirección de Entrega:* ${order.address}
+🧭 *Referencia:* ${order.reference || 'Ninguna'}
+🌆 *Zona:* ${order.deliveryZoneName || 'Ilo'}
+━━━━━━━━━━━━━━━━━━━━
+👤 *Cliente:* ${order.fullName}
+📞 *Teléfono:* ${order.phone}
+
+📦 *DETALLE DE PLATOS:*
+${itemsList}
+${taperText}${bagText}
+💵 *Subtotal Comida:* S/ ${order.subtotal.toFixed(2)}
+🥡 *Empaques:* S/ ${(order.taperCost + order.bagCost).toFixed(2)}
+🛵 *Costo de Envío:* ${order.deliveryCost === 0 ? 'Se coordina con motorizado' : `S/ ${order.deliveryCost.toFixed(2)}`}
+💰 *TOTAL GENERAL A PAGAR:* S/ ${order.total.toFixed(2)}
+
+${paymentMethodText}
+${order.wantsReceipt ? `🧾 *Comprobante Solicitado:* Nota de Pedido (DNI: ${order.dni || 'VARIOS'})` : '🧾 *Comprobante:* No solicitado'}
+━━━━━━━━━━━━━━━━━━━━
+✅ *Pedido registrado desde la página web*`;
+  }
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Store, Truck, MapPin, Compass, ArrowLeft, ArrowRight, Loader2, Check } from 'lucide-react';
+import { ShoppingBag, Truck, MapPin, Compass, ArrowLeft, ArrowRight, Loader2, Check, Clock } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../data/products';
 
 export default function DeliveryLocationStep({
@@ -11,6 +11,17 @@ export default function DeliveryLocationStep({
   const [locating, setLocating] = useState(false);
   const [locSuccess, setLocSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const pickupOptions = BUSINESS_CONFIG.pickupTimes || [
+    'En 20 minutos',
+    'En 30 minutos',
+    'En 45 minutos',
+    'En 1 hora',
+    'Hora específica (indicar)'
+  ];
+
+  const currentPickupTime = customerData.pickupTime || 'En 30 minutos';
+  const isCustomTime = !pickupOptions.slice(0, 4).includes(currentPickupTime);
 
   // Sugerir ubicación con Geolocation API del dispositivo
   const handleGetLocation = () => {
@@ -39,7 +50,7 @@ export default function DeliveryLocationStep({
       },
       (err) => {
         setLocating(false);
-        setError('No se pudo acceder a tu ubicación. Puedes escribir tu dirección manualmente.');
+        setError('No se pudo acceder a tu ubicación GPS. Puedes escribir tu dirección manualmente.');
       },
       { timeout: 10000, enableHighAccuracy: true }
     );
@@ -52,13 +63,17 @@ export default function DeliveryLocationStep({
         setError('Por favor indica tu dirección de entrega en Ilo.');
         return;
       }
+    } else {
+      if (!customerData.pickupTime) {
+        onUpdateCustomerData({ pickupTime: 'En 30 minutos' });
+      }
     }
     setError('');
     onNext();
   };
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-6">
+    <div className="max-w-xl mx-auto px-4 py-6">
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         <div className="border-b border-slate-100 pb-4">
           <span className="text-xs font-black text-amber-600 uppercase tracking-widest block mb-1">
@@ -68,39 +83,48 @@ export default function DeliveryLocationStep({
             ¿Cómo deseas recibir tu comida?
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Elige si pasarás a recogerlo al local de Don José o si te lo enviamos por delivery.
+            Puedes separar tu pedido para recogerlo calientito en el local o pedir delivery a domicilio en Ilo.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Opciones de Modalidad */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            {/* Modalidad 1: Separar para llevar */}
             <button
               type="button"
-              onClick={() => onUpdateCustomerData({ deliveryType: 'tienda' })}
-              className={`p-4 rounded-2xl border-2 text-left transition flex flex-col justify-between gap-2 ${
+              onClick={() =>
+                onUpdateCustomerData({
+                  deliveryType: 'tienda',
+                  pickupTime: customerData.pickupTime || 'En 30 minutos'
+                })
+              }
+              className={`p-4 rounded-2xl border-2 text-left transition flex flex-col justify-between gap-3 cursor-pointer ${
                 customerData.deliveryType === 'tienda'
-                  ? 'border-amber-500 bg-amber-50/60 shadow-xs'
+                  ? 'border-amber-500 bg-amber-50/70 shadow-xs'
                   : 'border-slate-200 hover:border-slate-300 bg-slate-50'
               }`}
             >
               <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold">
-                <Store className="w-5 h-5" />
+                <ShoppingBag className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-black text-slate-900 text-sm">Recojo en Local</h4>
-                <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                  PROMUVI IV Mz 35 Lte 20 (Sin costo de envío)
+                <h4 className="font-black text-slate-900 text-sm">
+                  Separar pedido para llevar
+                </h4>
+                <p className="text-[11px] text-slate-600 mt-1 leading-snug">
+                  Recoges en tienda a la hora que tú elijas. Sin costo de delivery.
                 </p>
               </div>
             </button>
 
+            {/* Modalidad 2: Delivery */}
             <button
               type="button"
               onClick={() => onUpdateCustomerData({ deliveryType: 'delivery' })}
-              className={`p-4 rounded-2xl border-2 text-left transition flex flex-col justify-between gap-2 ${
+              className={`p-4 rounded-2xl border-2 text-left transition flex flex-col justify-between gap-3 cursor-pointer ${
                 customerData.deliveryType === 'delivery'
-                  ? 'border-amber-500 bg-amber-50/60 shadow-xs'
+                  ? 'border-emerald-600 bg-emerald-50/70 shadow-xs'
                   : 'border-slate-200 hover:border-slate-300 bg-slate-50'
               }`}
             >
@@ -109,16 +133,65 @@ export default function DeliveryLocationStep({
               </div>
               <div>
                 <h4 className="font-black text-slate-900 text-sm">Delivery a Domicilio</h4>
-                <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                  Directo a tu casa en Ilo por motorizado
+                <p className="text-[11px] text-slate-600 mt-1 leading-snug">
+                  Directo a tu puerta en Ilo por motorizado.
                 </p>
               </div>
             </button>
           </div>
 
-          {/* Formulario de Delivery */}
+          {/* Sub-formulario si elige Separar para llevar */}
+          {customerData.deliveryType === 'tienda' && (
+            <div className="p-4 sm:p-5 bg-amber-50/40 rounded-2xl border border-amber-200 space-y-4 animate-in fade-in">
+              <div className="flex items-start gap-2.5 text-xs text-amber-950 font-medium">
+                <MapPin className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold">Dirección del Local de Don José:</p>
+                  <p className="text-slate-600">{BUSINESS_CONFIG.address}</p>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-black text-slate-800 mb-2 flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-amber-600" />
+                  <span>¿A qué hora aproximada pasarás a recogerlo?</span>
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {['En 20 minutos', 'En 30 minutos', 'En 45 minutos', 'En 1 hora'].map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => onUpdateCustomerData({ pickupTime: option })}
+                      className={`py-2 px-2.5 rounded-xl text-xs font-bold transition text-center border cursor-pointer ${
+                        currentPickupTime === option
+                          ? 'bg-amber-500 text-slate-950 border-amber-600 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-2.5">
+                  <input
+                    type="text"
+                    value={isCustomTime ? currentPickupTime : ''}
+                    onChange={(e) => onUpdateCustomerData({ pickupTime: e.target.value })}
+                    placeholder="O escribe una hora exacta (Ej: A las 8:30 PM)"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-medium"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-500 mt-1.5">
+                  Tus platos se prepararán para que estén calientes y listos en la barra a esa hora.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Sub-formulario si elige Delivery a Domicilio */}
           {customerData.deliveryType === 'delivery' && (
-            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-4 animate-in fade-in">
+            <div className="p-4 sm:p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-4 animate-in fade-in">
               {/* Botón de Geolocalización */}
               <div>
                 <button
@@ -130,7 +203,7 @@ export default function DeliveryLocationStep({
                   {locating ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Detectando tu ubicación...</span>
+                      <span>Detectando tu ubicación GPS...</span>
                     </>
                   ) : locSuccess ? (
                     <>
@@ -140,7 +213,7 @@ export default function DeliveryLocationStep({
                   ) : (
                     <>
                       <Compass className="w-4 h-4 text-blue-600" />
-                      <span>📍 Usar la ubicación de mi celular / computadora</span>
+                      <span>📍 Usar la ubicación GPS de mi dispositivo</span>
                     </>
                   )}
                 </button>

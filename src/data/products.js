@@ -8,18 +8,24 @@ export const BUSINESS_CONFIG = {
   adminDisplayPhone: '960 447 032',
   secondaryPhone: '953 953 533 / 959 578 182',
   yapeNumber: '960 447 032',
-
   yapeOwner: 'José Ccarita (Don José)',
   packaging: {
     taperPrice: 1.00, // S/ 1.00 por plato servido para llevar
     bagPrice: 0.50    // S/ 0.50 por pedido
   },
   deliveryZones: [
-    { id: 'tienda', name: 'Recojo en Local (A.H. PROMUVI IV Mz 35 Lte 20)', cost: 0 },
+    { id: 'tienda', name: 'Separar pedido para llevar (Recojo en Tienda)', cost: 0 },
     { id: 'nuevo-ilo', name: 'Nuevo Ilo / PROMUVI', cost: 4.00 },
     { id: 'pampa', name: 'Pampa Inalámbrica', cost: 5.00 },
     { id: 'cercado', name: 'Cercado de Ilo / Garibaldi / Puerto', cost: 6.00 },
     { id: 'externo', name: 'Empresa Externa (Pagas la carrera al repartidor)', cost: 0 }
+  ],
+  pickupTimes: [
+    'En 20 minutos',
+    'En 30 minutos',
+    'En 45 minutos',
+    'En 1 hora',
+    'Hora específica (indicar)'
   ]
 };
 
@@ -94,7 +100,7 @@ export const INITIAL_PRODUCTS = [
     unit: 'Para compartir en familia',
     requiresTaper: true,
     taperCount: 2,
-    popular: true,
+    popular: false,
     image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80',
     description: 'Surtido de carnes a la parrilla, chorizos artesanales, papas y ensalada.'
   },
@@ -107,7 +113,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: true,
     taperCount: 1,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=500&q=80',
     description: 'Tres generosos cortes de carne a la brasa con papas y salsas.'
   },
   {
@@ -131,7 +137,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: true,
     taperCount: 1,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
     description: 'Jugoso cordero asado al carbón con hierbas aromáticas.'
   },
   {
@@ -155,7 +161,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: true,
     taperCount: 1,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=500&q=80',
     description: 'Carne de alpaca seleccionada, suave, magra y saludable.'
   },
   {
@@ -331,7 +337,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: true,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=500&q=80',
     description: 'Inca Kola helada para acompañar tus parrilladas y pollos.'
   },
   {
@@ -343,8 +349,8 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: true,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80',
-    description: 'Formato familiar no retornable.'
+    image: 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=500&q=80',
+    description: 'Formato familiar no retornable bien helada.'
   },
   {
     id: 'beb-3',
@@ -355,8 +361,8 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80',
-    description: 'Gaseosa personal.'
+    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=500&q=80',
+    description: 'Gaseosa personal bien helada.'
   },
   {
     id: 'beb-4',
@@ -368,7 +374,7 @@ export const INITIAL_PRODUCTS = [
     taperCount: 0,
     popular: false,
     image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80',
-    description: 'Coca Cola helada personal.'
+    description: 'Coca Cola clásica helada personal.'
   },
   {
     id: 'beb-5',
@@ -379,7 +385,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: true,
-    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=500&q=80',
     description: 'Chicha morada natural hervida con maíz morado, piña, manzana y canela.'
   },
   {
@@ -391,7 +397,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?auto=format&fit=crop&w=500&q=80',
     description: 'Chicha natural bien helada en porción personal.'
   },
   {
@@ -415,7 +421,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1608270191778-83e8b0b94c0a?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=500&q=80',
     description: 'Cerveza clásica bien fría.'
   },
   {
@@ -427,7 +433,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1608270191778-83e8b0b94c0a?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1600788886242-5c96aabe3757?auto=format&fit=crop&w=500&q=80',
     description: 'Cerveza rubia bien helada.'
   },
   {
@@ -439,7 +445,7 @@ export const INITIAL_PRODUCTS = [
     requiresTaper: false,
     taperCount: 0,
     popular: false,
-    image: 'https://images.unsplash.com/photo-1608270191778-83e8b0b94c0a?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1518057111178-44a106bad636?auto=format&fit=crop&w=500&q=80',
     description: 'Cerveza Cusqueña premium a elección.'
   },
 

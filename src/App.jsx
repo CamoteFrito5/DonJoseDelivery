@@ -40,7 +40,8 @@ export default function App() {
     deliveryType: 'tienda', // 'tienda' | 'delivery'
     deliveryZoneId: 'nuevo-ilo',
     address: '',
-    reference: ''
+    reference: '',
+    pickupTime: 'En 30 minutos'
   });
 
   // Paso 4: Pago y Comprobante (100% opcional el recibo y DNI)
@@ -178,6 +179,7 @@ export default function App() {
       fullName: customerData.fullName,
       phone: customerData.phone,
       deliveryType: customerData.deliveryType,
+      pickupTime: customerData.deliveryType === 'tienda' ? (customerData.pickupTime || 'En 30 minutos') : '',
       deliveryZoneId: customerData.deliveryZoneId,
       deliveryZoneName: selectedZone.name,
       address: customerData.address,
@@ -361,6 +363,7 @@ export default function App() {
         {/* ================= PASO 4: COMPROBANTE Y PAGO (RECIBO Y DNI OPCIONALES) ================= */}
         {currentStep === 4 && (
           <ReceiptPaymentStep
+            customerData={customerData}
             orderCalculation={orderCalculations}
             paymentData={paymentData}
             onUpdatePaymentData={(newData) =>

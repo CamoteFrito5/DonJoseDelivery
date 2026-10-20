@@ -1,11 +1,16 @@
 import { INITIAL_PRODUCTS } from '../data/products';
 
-const PRODUCTS_STORAGE_KEY = 'donjose_menu_catalog_v1';
+const PRODUCTS_STORAGE_KEY = 'donjose_menu_catalog_v3';
 
 export function getStoredCatalog() {
   try {
     const data = localStorage.getItem(PRODUCTS_STORAGE_KEY);
     if (!data) {
+      // Limpiar versiones obsoletas si existiesen
+      try {
+        localStorage.removeItem('donjose_menu_catalog_v1');
+        localStorage.removeItem('donjose_menu_catalog_v2');
+      } catch (_) {}
       localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
       return INITIAL_PRODUCTS;
     }

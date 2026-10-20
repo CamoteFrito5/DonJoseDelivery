@@ -7,7 +7,7 @@ export default function StepBar({ currentStep, onStepClick }) {
     { number: 2, title: 'Datos', icon: User },
     { number: 3, title: 'Entrega', icon: MapPin },
     { number: 4, title: 'Recibo', icon: FileText },
-    { number: 5, title: 'En Vivo', icon: CheckCircle2 }
+    { number: 5, title: 'Confirmado', icon: CheckCircle2 }
   ];
 
   return (
