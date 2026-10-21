@@ -243,7 +243,7 @@ export default function App() {
         {currentStep === 1 && (
           <div className="space-y-6">
             {/* Banner de Bienvenida */}
-            <div className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 rounded-3xl p-6 sm:p-8 text-slate-950 shadow-md">
+            <div className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 rounded-3xl p-6 sm:p-8 text-slate-950 shadow-md flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="max-w-xl">
                 <span className="inline-flex items-center gap-1.5 bg-slate-950 text-amber-400 text-xs font-black px-3 py-1 rounded-full mb-3 shadow-xs">
                   <Utensils className="w-3.5 h-3.5" />
@@ -253,8 +253,11 @@ export default function App() {
                   Haz tu pedido directo sin llamadas ni demoras.
                 </h2>
                 <p className="text-amber-100 text-sm sm:text-base font-medium mt-2">
-                  Pollos a la brasa, parrilladas jugosas y platos criollos en Ilo. Escoge tus platos y sigue tu orden en tiempo real.
+                  Pollos a la brasa, parrilladas jugosas y platos criollos en Ilo. Escoge tus platos y coordina tu pedido directo a cocina.
                 </p>
+              </div>
+              <div className="hidden sm:flex shrink-0 w-28 h-28 bg-white rounded-2xl p-2 items-center justify-center shadow-lg border border-amber-300">
+                <img src="/logo.png" alt="Logo Don José" className="w-full h-full object-contain" />
               </div>
             </div>
 

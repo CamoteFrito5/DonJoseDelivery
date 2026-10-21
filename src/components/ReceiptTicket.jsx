@@ -18,6 +18,11 @@ export default function ReceiptTicket({ order }) {
     <div className="bg-white border-2 border-dashed border-slate-300 rounded-2xl p-6 max-w-sm mx-auto font-mono text-xs text-slate-800 shadow-md">
       {/* Encabezado del Recibo idéntico al PDF R101 */}
       <div className="text-center space-y-0.5 pb-3 border-b border-dashed border-slate-300">
+        <img
+          src="/logo.png"
+          alt="Logo Don José"
+          className="w-14 h-14 object-contain mx-auto mb-1"
+        />
         <div className="font-black text-base text-slate-900 tracking-wider">
           DON JOSE
         </div>

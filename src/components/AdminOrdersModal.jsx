@@ -84,7 +84,7 @@ export default function AdminOrdersModal({ isOpen, onClose, onCatalogUpdated }) 
       setIsAuthenticated(true);
       setErrorMsg('');
     } else {
-      setErrorMsg('Contraseña incorrecta. (Ejemplo configurado: ParrilladaDonJose432%)');
+      setErrorMsg('Contraseña incorrecta. Inténtalo nuevamente.');
     }
   };
 
@@ -210,8 +210,8 @@ export default function AdminOrdersModal({ isOpen, onClose, onCatalogUpdated }) 
         {/* Pantalla de Inicio de Sesión con Contraseña */}
         {!isAuthenticated ? (
           <div className="p-8 max-w-sm mx-auto text-center space-y-4 my-auto">
-            <div className="w-14 h-14 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto">
-              <Lock className="w-7 h-7" />
+            <div className="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto border border-amber-200/60 p-2 shadow-xs">
+              <img src="/logo.png" alt="Logo Don José" className="w-full h-full object-contain" />
             </div>
             <div>
               <h3 className="text-lg font-black text-slate-900">Acceso Seguro de Caja</h3>
@@ -226,7 +226,7 @@ export default function AdminOrdersModal({ isOpen, onClose, onCatalogUpdated }) 
                   autoFocus
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Contraseña (ParrilladaDonJose432%)"
+                  placeholder="Ingresa la contraseña"
                   className="w-full text-center text-sm font-semibold py-3 px-4 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500"
                 />
                 <button

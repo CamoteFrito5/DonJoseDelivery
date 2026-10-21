@@ -8,9 +8,11 @@ export default function Header({ cartCount, onOpenCart, onOpenAdmin, currentStep
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Marca y Ubicación */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-amber-500 text-white rounded-xl flex items-center justify-center font-bold text-2xl shadow-md">
-            DJ
-          </div>
+          <img
+            src="/logo.png"
+            alt="Logo Don José"
+            className="w-12 h-12 object-contain rounded-xl shadow-xs border border-amber-200/50 bg-white p-0.5"
+          />
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">
