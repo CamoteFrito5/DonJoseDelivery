@@ -8,7 +8,7 @@ export const BUSINESS_CONFIG = {
   adminDisplayPhone: '960 447 032',
   secondaryPhone: '953 953 533 / 959 578 182',
   yapeNumber: '960 447 032',
-  yapeOwner: 'José Ccarita (Don José)',
+  yapeOwner: 'Koc Lay Phillipe Jilaja Yi',
   packaging: {
     taperPrice: 1.00, // S/ 1.00 por plato servido para llevar
     bagPrice: 0.50    // S/ 0.50 por pedido

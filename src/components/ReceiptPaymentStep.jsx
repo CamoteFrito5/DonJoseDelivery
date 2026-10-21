@@ -116,27 +116,50 @@ export default function ReceiptPaymentStep({
 
               {/* Detalle si elige YAPE */}
               {paymentData.paymentMethod === 'YAPE' && (
-                <div className="p-4 bg-purple-50 rounded-2xl border border-purple-200 space-y-2 animate-in fade-in">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-[11px] font-bold text-purple-700 block">Número Yape de Don José:</span>
-                      <span className="text-xl font-black text-purple-950 font-mono tracking-wider">
-                        {BUSINESS_CONFIG.yapeNumber}
-                      </span>
-                      <p className="text-xs text-purple-800 font-semibold">{BUSINESS_CONFIG.yapeOwner}</p>
+                <div className="p-4 sm:p-5 bg-purple-50/90 rounded-2xl border-2 border-purple-200 space-y-4 animate-in fade-in">
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    {/* Tarjeta del Código QR de Yape */}
+                    <div className="w-36 h-48 sm:w-40 sm:h-52 bg-white rounded-2xl p-1.5 shadow-md border border-purple-200 shrink-0 flex items-center justify-center overflow-hidden">
+                      <img
+                        src="/yape-qr.jpg"
+                        alt="Código QR de Yape"
+                        className="w-full h-full object-contain rounded-xl"
+                      />
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleCopy}
-                      className="px-3 py-2 bg-white hover:bg-purple-100 text-purple-700 font-bold border border-purple-200 rounded-xl text-xs transition active:scale-95 flex items-center gap-1 shadow-2xs cursor-pointer"
-                    >
-                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copied ? '¡Copiado!' : 'Copiar'}</span>
-                    </button>
+
+                    {/* Información y botón para copiar */}
+                    <div className="space-y-2.5 flex-1 text-center sm:text-left">
+                      <div>
+                        <span className="text-xs font-bold text-purple-700 block">
+                          Escanea el QR o yapea directo a:
+                        </span>
+                        <span className="text-2xl font-black text-purple-950 font-mono tracking-wider block">
+                          {BUSINESS_CONFIG.yapeNumber}
+                        </span>
+                        <p className="text-xs font-bold text-purple-900 mt-0.5">
+                          Titular: {BUSINESS_CONFIG.yapeOwner}
+                        </p>
+                        <div className="inline-block mt-1 bg-purple-200 text-purple-950 text-xs font-black px-2.5 py-0.5 rounded-full">
+                          Monto a yapear: S/ {orderCalculation.total.toFixed(2)}
+                        </div>
+                      </div>
+
+                      <div>
+                        <button
+                          type="button"
+                          onClick={handleCopy}
+                          className="w-full sm:w-auto px-3.5 py-2 bg-white hover:bg-purple-100 text-purple-700 font-bold border border-purple-300 rounded-xl text-xs transition active:scale-95 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer mx-auto sm:mx-0"
+                        >
+                          {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                          <span>{copied ? '¡Número copiado!' : 'Copiar Número de Yape'}</span>
+                        </button>
+                      </div>
+
+                      <p className="text-[11px] text-purple-800 leading-snug">
+                        💡 Puedes escanear el QR desde tu celular o hacer captura de pantalla si estás navegando desde el mismo móvil.
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-[11px] text-purple-700">
-                    Al terminar, podrás adjuntar la captura del pago directamente en el chat de WhatsApp.
-                  </p>
                 </div>
               )}
 
