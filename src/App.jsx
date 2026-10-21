@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, ShoppingBag, ArrowRight, Utensils, ShieldCheck, Sparkles, RefreshCw } from 'lucide-react';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import StepBar from './components/StepBar';
 import ProductCard from './components/ProductCard';
 import CartDrawer from './components/CartDrawer';
@@ -386,6 +387,9 @@ export default function App() {
           />
         )}
       </main>
+
+      {/* Pie de Página con Consultas y Más Información del Negocio */}
+      <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
 
       {/* Barra Flotante Inferior en Paso 1 */}
       {currentStep === 1 && totalCartCount > 0 && (

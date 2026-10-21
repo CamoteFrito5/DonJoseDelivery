@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, Phone, Store, ClipboardList, MessageCircle } from 'lucide-react';
+import { ShoppingBag, Store, ShieldCheck } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../data/products';
 
 export default function Header({ cartCount, onOpenCart, onOpenAdmin, currentStep }) {
@@ -31,34 +31,21 @@ export default function Header({ cartCount, onOpenCart, onOpenAdmin, currentStep
 
         {/* Acciones */}
         <div className="flex items-center gap-2">
-          {/* WhatsApp de Consultas para el Cliente */}
-          <a
-            href={`https://wa.me/${BUSINESS_CONFIG.adminWhatsApp}?text=${encodeURIComponent('Hola Don José, tengo una consulta sobre el menú o mi pedido.')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Consultas al WhatsApp de Don José"
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition cursor-pointer"
-          >
-            <MessageCircle className="w-4 h-4 text-emerald-600" />
-            <span className="hidden sm:inline">Consultas: {BUSINESS_CONFIG.adminDisplayPhone}</span>
-            <span className="sm:hidden">Consultas</span>
-          </a>
-
-          {/* Botón Administrador (Ver registros / Excel) */}
+          {/* Botón Administrador */}
           <button
             onClick={onOpenAdmin}
-            title="Panel de administración y pedidos"
-            className="hidden md:flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer"
+            title="Panel de administración"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition cursor-pointer"
           >
-            <ClipboardList className="w-4 h-4 text-slate-600" />
-            <span>Pedidos (Excel)</span>
+            <ShieldCheck className="w-4 h-4 text-slate-600" />
+            <span>Admin</span>
           </button>
 
           {/* Carrito de compras */}
           <button
             onClick={onOpenCart}
             aria-label="Abrir carrito"
-            className="relative flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95 text-base"
+            className="relative flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95 text-base cursor-pointer"
           >
             <ShoppingBag className="w-5 h-5 text-slate-950" />
             <span className="hidden sm:inline font-extrabold">Mi Pedido</span>
